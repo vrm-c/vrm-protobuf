@@ -1,0 +1,78 @@
+syntax = "proto3";
+package VrmProtobuf;
+
+import "google/protobuf/wrappers.proto";
+
+message Meta
+{
+  // Describe the name of the avatar model
+  string name = 1;
+  
+  // Describe the version that creates the model
+  string version = 2;
+  
+  // Describe the name of the author of the model
+  repeated string authors = 3;
+
+  string copyrights = 4;
+  
+  // Describe the contact information of the author
+  string contactInformation = 5;
+  
+  // Describe original / related works of the avatar (URL), if any
+  string reference = 6;
+  
+  // The index to access the thumbnail image of the avatar model in gltf.images. The texture resolution of 2048x2048 is recommended
+  google.protobuf.Int32Value thumbnailImage = 7;
+  
+  enum AvatarPermissionType{
+    OnlyAuthor = 0;
+    ExplicitlyLicensedPerson = 1;
+    Everyone = 2;
+  }
+  // A person who can perform with this avatars
+  AvatarPermissionType avatarPermission = 8;
+  
+  // Perform violent acts with this avatar
+  bool violentUsage = 9;
+  
+  // Perform sexual acts with this avatar
+  bool sexualUsage = 10;
+
+  bool gameUsage = 11;
+  
+  enum CommercialUsageType{
+    PersonalNonCommercialNonProfit = 0;
+    PersonalNonCommercialProfit = 1;
+    PersonalCommercial = 2;
+    Corporation = 3;
+  }
+  // Commercial use
+  CommercialUsageType commercialUsage = 12;
+
+  bool politicalOrReligiousUsage = 13;
+  
+  // Describe the URL links of license with regard to other permissions
+  string otherPermissionUrl = 14;
+  
+  enum CreditNotationType
+  {
+    Required = 0;
+    Unnecessary = 1;
+    Abandoned = 2;
+  }
+  CreditNotationType creditNotation = 15;
+
+  bool allowRedistribution = 16;
+
+  enum ModifyType
+  {
+    Prohibited = 0;
+    Inherited = 1;
+    NotInherited = 2;
+  }
+  ModifyType modify = 17;
+  
+  // Describe the URL links of other license
+  string otherLicenseUrl = 18;
+}
