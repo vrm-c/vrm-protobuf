@@ -1,0 +1,13 @@
+syntax = "proto3";
+package VrmProtobuf;
+
+import "VRMC_vrm.proto";
+import "VRMC_springBone.proto";
+import "VRMC_constraint.proto";
+
+message Extensions
+{
+  VrmProtobuf.VRMCVrm VRMC_vrm = 1;
+  VrmProtobuf.VRMCSpringBone VRMC_springBone = 2;
+  VrmProtobuf.VRMCConstraint VRMC_constraint = 3;
+}
