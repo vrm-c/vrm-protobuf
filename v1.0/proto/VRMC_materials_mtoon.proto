@@ -16,8 +16,7 @@ message VRMC_materials_mtoon {
   RenderMode renderMode = 3;
   enum CullMode {
     off = 0;
-    front = 1;
-    back = 2;
+    back = 1;
   }
   CullMode cullMode = 4;
   int32 renderQueueOffsetNumber = 5;
