@@ -42,7 +42,7 @@ message BlendShapeGroup {
   }
   repeated BlendShapeBind binds = 3;
 
-  enum MaterialValueTypes {
+  enum MaterialValueType {
     color = 0;
     uvScale = 1;
     uvOffset = 2;
@@ -51,7 +51,7 @@ message BlendShapeGroup {
   // Material animation references. "required": [ "material", "type", "targetValue" ]
   message MaterialValue {
     int32 material = 1;
-    MaterialValueTypes type = 2;
+    MaterialValueType type = 2;
     repeated float targetValue = 3;
   }
   repeated MaterialValue materialValues = 4;
