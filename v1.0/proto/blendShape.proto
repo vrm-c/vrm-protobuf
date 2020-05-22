@@ -44,17 +44,27 @@ message BlendShapeGroup {
 
   enum MaterialValueType {
     color = 0;
-    uvScale = 1;
-    uvOffset = 2;
+    emissionColor = 1;
+    shadeColor = 2;
+    rimColor = 3;
+    outlineColor = 4;
   }
 
-  // Material animation references. "required": [ "material", "type", "targetValue" ]
+  // Material animation references. "required": [ "material", "type",
+  // "targetValue" ]
   message MaterialValue {
     int32 material = 1;
     MaterialValueType type = 2;
     repeated float targetValue = 3;
   }
   repeated MaterialValue materialValues = 4;
+
+  message MaterialUVBind {
+    int32 material = 1;
+    repeated float scaling = 2;
+    repeated float offset = 3;
+  }
+  repeated MaterialUVBind materialUVBinds = 5;
 
   // Interpret non-zero values ​​as 1
   google.protobuf.BoolValue isBinary = 7;
