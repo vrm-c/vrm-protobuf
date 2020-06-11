@@ -14,8 +14,8 @@ syntax = "proto3";
 // 上記だけでは不十分で、required であっても 0値 がエクスポート時に
 // 省略される問題がある(0値がintのデフォルト値でデフォルト値を省略する挙動のため)。
 // オプションでデフォルト値省略をすべて止めると、今度は値を指定していない値や空の配列が出力されてしまう。
-// index として使用する int 値(0でも省略してはいけない)はすべて required の有無にかかわらずに、
-// google.protobuf.Int32Value にすること。
+// index として使用する int 値(0でも省略してはいけない)はすべて required
+// の有無にかかわらずに、 google.protobuf.Int32Value にすること。
 //
 import "google/protobuf/wrappers.proto";
 package VrmProtobuf;
@@ -99,18 +99,18 @@ message AccessorSparseValues {
   google.protobuf.Int32Value byteOffset = 2;
 }
 
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.channel.schema.json
-// "required": [ "sampler", "target" ]
-message AnimationChannel {
-  google.protobuf.Int32Value sampler = 1;
-  google.protobuf.Int32Value target = 2;
-}
-
 // https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.channel.target.schema.json
 // "required": [ "path" ]
 message AnimationChannelTarget {
   google.protobuf.Int32Value node = 1;
   string path = 2;
+}
+
+// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.channel.schema.json
+// "required": [ "sampler", "target" ]
+message AnimationChannel {
+  google.protobuf.Int32Value sampler = 1;
+  AnimationChannelTarget target = 2;
 }
 
 // https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.sampler.schema.json
