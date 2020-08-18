@@ -1,10 +1,7 @@
 syntax = "proto3";
 package VrmProtobuf;
-
 import "google/protobuf/wrappers.proto";
 
-// Specification undecided in draft state
 message VRMCConstraint
 {
-
 }

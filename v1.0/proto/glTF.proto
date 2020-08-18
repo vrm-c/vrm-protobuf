@@ -1,374 +1,881 @@
-// : VSCode formatter settings :
-// "clang-format.language.proto.style": "{ IndentWidth: 2 }",
-// "[proto3]": {
-//   "editor.defaultFormatter": "xaver.clang-format"
-// }
 syntax = "proto3";
-//
-// JsonSchemaとの非互換について
-//
-// Use google.protobuf.Int32Value, FloatValue, BoolValue for int, float, bool
-// that is not required property. string, repeated, message is
-// already nullable in C#.
-//
-// 上記だけでは不十分で、required であっても 0値 がエクスポート時に
-// 省略される問題がある(0値がintのデフォルト値でデフォルト値を省略する挙動のため)。
-// オプションでデフォルト値省略をすべて止めると、今度は値を指定していない値や空の配列が出力されてしまう。
-// index として使用する int 値(0でも省略してはいけない)はすべて required
-// の有無にかかわらずに、 google.protobuf.Int32Value にすること。
-//
-import "google/protobuf/wrappers.proto";
 package VrmProtobuf;
-
+import "google/protobuf/wrappers.proto";
+import "VRMC_vrm.proto";
+import "VRMC_springBone.proto";
+import "VRMC_constraint.proto";
 import "VRMC_materials_mtoon.proto";
-import "glTF_extensions.proto";
 
-// [START GLTF]
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/glTF.schema.json
-message glTF {
-  repeated string extensionsUsed = 1;
-  repeated string extensionsRequired = 2;
-  repeated Accessor accessors = 3;
-  repeated Animation animations = 4;
-  Asset asset = 5;
-  repeated Buffer buffers = 6;
-  repeated BufferView bufferViews = 7;
-  repeated Image images = 8;
-  repeated Material materials = 9;
-  repeated Mesh meshes = 10;
-  repeated Node nodes = 11;
-  repeated Sampler samplers = 12;
-  google.protobuf.Int32Value scene = 13;
-  repeated Scene scenes = 14;
-  repeated Skin skins = 15;
-  repeated Texture textures = 16;
-  Extensions extensions = 17;
-}
+message AccessorSparseIndices
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
 
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/accessor.schema.json
-// "required": [ "componentType", "count", "type" ]
-message Accessor {
-  google.protobuf.Int32Value bufferView = 1;
-  google.protobuf.Int32Value byteOffset = 2;
-  // enum ComponentType {
-  //   COMPONENTTYPE_UNKNOWN = 0;
-  //   BYTE = 5120;
-  //   UNSIGNED_BYTE = 5121;
-  //   SHORT = 5122;
-  //   UNSIGNED_SHORT = 5123;
-  //   UNSIGNED_INT = 5125;
-  //   FLOAT = 5126;
-  // }
-  int32 componentType = 3;
-  google.protobuf.BoolValue normalized = 4;
-  int32 count = 5;
-  //  "SCALAR", "VEC2", "VEC3", "VEC4", "MAT2", "MAT3", "MAT4"
-  string type = 6;
-  repeated float max = 7;
-  repeated float min = 8;
-  AccessorSparse sparse = 9;
-  string name = 10;
-}
+  // Application-specific data.
+  Extras extras = 2;
 
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/accessor.sparse.indices.schema.json
-// "required": [ "bufferView", "componentType" ]
-message AccessorSparseIndices {
-  google.protobuf.Int32Value bufferView = 1;
-  google.protobuf.Int32Value byteOffset = 2;
-  // enum ComponentType {
-  //   UNKNOWN = 0;
-  //   UNSIGNED_BYTE = 5121;
-  //   UNSIGNED_SHORT = 5123;
-  //   UNSIGNED_INT = 5125;
-  // }
-  int32 componentType = 3;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/accessor.sparse.schema.json
-// "required": [ "count", "indices", "values" ]
-message AccessorSparse {
-  int32 count = 1;
-  AccessorSparseIndices indices = 2;
-  AccessorSparseValues values = 3;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/accessor.sparse.values.schema.json
-// "required": [ "bufferView" ]
-message AccessorSparseValues {
-  google.protobuf.Int32Value bufferView = 1;
-  google.protobuf.Int32Value byteOffset = 2;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.channel.target.schema.json
-// "required": [ "path" ]
-message AnimationChannelTarget {
-  google.protobuf.Int32Value node = 1;
-  string path = 2;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.channel.schema.json
-// "required": [ "sampler", "target" ]
-message AnimationChannel {
-  google.protobuf.Int32Value sampler = 1;
-  AnimationChannelTarget target = 2;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.sampler.schema.json
-// "required": [ "input", "output" ]
-message AnimationSampler {
-  google.protobuf.Int32Value input = 1;
-  string interpolation = 2;
-  google.protobuf.Int32Value output = 3;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/animation.schema.json
-// "required": [ "channels", "samplers" ]
-message Animation {
-  repeated AnimationChannel channels = 1;
-  repeated AnimationSampler samplers = 2;
-  string name = 3;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/asset.schema.json
-// "required": [ "version" ]
-message Asset {
-  string copyright = 1;
-  string generator = 2;
-  string version = 3;
-  string minVersion = 4;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/buffer.schema.json
-// "required": [ "byteLength" ]
-message Buffer {
-  string uri = 1;
-  int32 byteLength = 2;
-  string name = 3;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/bufferView.schema.json
-// "required": [ "buffer", "byteLength" ]
-message BufferView {
-  google.protobuf.Int32Value buffer = 1;
-  google.protobuf.Int32Value byteOffset = 2;
-  int32 byteLength = 3;
-  google.protobuf.Int32Value byteStride = 4;
-  string name = 5;
-  int32 target = 6;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/camera.orthographic.schema.json
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/camera.perspective.schema.json
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/camera.schema.json
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/image.schema.json
-// "oneOf": [
-//   { "required": [ "uri" ] },
-//   { "required": [ "bufferView" ] }
-// ]
-message Image {
-  string uri = 1;
-  // "image/jpeg", "image/png"
-  string mimeType = 2;
+  // The index of the bufferView with sparse indices. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
   google.protobuf.Int32Value bufferView = 3;
-  string name = 4;
-}
 
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/material.normalTextureInfo.schema.json
-// "required": [ "index" ]
-message MaterialNormalTextureInfo {
-  google.protobuf.Int32Value index = 1;
-  google.protobuf.Int32Value texCoord = 2;
-  google.protobuf.FloatValue scale = 3;
-  message Extensions {
-    // KHR_texture_transform
-    KHRTextureTransformExtension KHR_texture_transform = 1;
+  // The offset relative to the start of the bufferView in bytes. Must be aligned.
+  google.protobuf.Int32Value byteOffset = 4;
+
+  // The indices data type.
+  google.protobuf.Int32Value componentType = 5;
+}
+message AccessorSparseValues
+{
+  message Extensions
+  {
   }
-  Extensions extensions = 4;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/material.occlusionTextureInfo.schema.json
-// "required": [ "index" ]
-message MaterialOcclusionTextureInfo {
-  google.protobuf.Int32Value index = 1;
-  google.protobuf.Int32Value texCoord = 2;
-  google.protobuf.FloatValue strength = 3;
-  message Extensions {
-    // KHR_texture_transform
-    KHRTextureTransformExtension KHR_texture_transform = 1;
+  message Extras
+  {
   }
-  Extensions extensions = 4;
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The index of the bufferView with sparse values. Referenced bufferView can't have ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER target.
+  google.protobuf.Int32Value bufferView = 3;
+
+  // The offset relative to the start of the bufferView in bytes. Must be aligned.
+  google.protobuf.Int32Value byteOffset = 4;
 }
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/material.pbrMetallicRoughness.schema.json
-message MaterialPbrMetallicRoughness {
-  // RGBA
-  repeated float baseColorFactor = 1;
-  TextureInfo baseColorTexture = 2;
-  google.protobuf.FloatValue metallicFactor = 3;
-  google.protobuf.FloatValue roughnessFactor = 4;
-  TextureInfo metallicRoughnessTexture = 5;
-}
-
-message KHR_materials_unlit {}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/material.schema.json
-message Material {
-  string name = 1;
-  MaterialPbrMetallicRoughness pbrMetallicRoughness = 2;
-  MaterialNormalTextureInfo normalTexture = 3;
-  MaterialOcclusionTextureInfo occlusionTexture = 4;
-  TextureInfo emissiveTexture = 5;
-  // RGB
-  repeated float emissiveFactor = 6;
-  // "OPAQUE", "MASK", "BLEND"
-  string alphaMode = 7;
-  google.protobuf.FloatValue alphaCutoff = 8;
-  google.protobuf.BoolValue doubleSided = 9;
-  message Extensions {
-    // unlit
-    KHR_materials_unlit KHR_materials_unlit = 1;
-    // MToon extension
-    VrmProtobuf.VRMC_materials_mtoon VRMC_materials_mtoon = 2;
-    // This extension defines the specular-glossiness material model from Physically-Based Rendering (PBR).
-    KHRMaterialsPbrSpecularGlossinessExtension KHR_materials_pbrSpecularGlossiness = 3;
+message AccessorSparse
+{
+  message Extensions
+  {
   }
-  Extensions extensions = 10;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/mesh.primitive.schema.json
-// "required": [ "attributes" ]
-message MeshPrimitive {
-  map<string, int32> attributes = 1;
-  google.protobuf.Int32Value indices = 2;
-  google.protobuf.Int32Value material = 3;
-  // enum Mode {
-  //   POINTS = 0;
-  //   LINES = 1;
-  //   LINE_LOOP = 2;
-  //   LINE_STRIP = 3;
-  //   TRIANGLES = 4;
-  //   TRIANGLE_STRIP = 5;
-  //   TRIANGLE_FAN = 6;
-  // }
-  google.protobuf.Int32Value mode = 4;
-  message Target {
-    google.protobuf.Int32Value POSITION = 1;
-    google.protobuf.Int32Value NORMAL = 2;
-    google.protobuf.Int32Value TANGENT = 3;
+  message Extras
+  {
   }
-  repeated Target targets = 5;
-  message Extras {
-    // https://github.com/KhronosGroup/glTF/issues/1036
-    repeated string targetNames = 1;
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // Number of entries stored in the sparse array.
+  google.protobuf.Int32Value count = 3;
+
+  // Index array of size `count` that points to those accessor attributes that deviate from their initialization value. Indices must strictly increase.
+  AccessorSparseIndices indices = 4;
+
+  // Array of size `count` times number of components, storing the displaced accessor attributes pointed by `indices`. Substituted values must have the same `componentType` and number of components as the base accessor.
+  AccessorSparseValues values = 5;
+}
+message Accessor
+{
+  message Extensions
+  {
   }
-  Extras extras = 6;
-}
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
 
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/mesh.schema.json
-message Mesh {
-  repeated MeshPrimitive primitives = 2;
-  // weights
-  string name = 1;
-}
+  // Application-specific data.
+  Extras extras = 2;
 
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/node.schema.json
-message Node {
-  string name = 1;
-  repeated int32 children = 2;
-  // float[16]
-  repeated float matrix = 3;
-  // float[4]
-  repeated float rotation = 4;
-  // float[3]
-  repeated float scale = 5;
-  // float[3]
-  repeated float translation = 6;
-  google.protobuf.Int32Value mesh = 7;
-  google.protobuf.Int32Value skin = 8;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/sampler.schema.json
-message Sampler {
-  // enum FilterType {
-  //   FILTER_UNKNOWN = 0;
-  //   NEAREST = 9728;
-  //   LINEAR = 9729;
-  //   NEAREST_MIPMAP_NEAREST = 9984;
-  //   LINEAR_MIPMAP_NEAREST = 9985;
-  //   NEAREST_MIPMAP_LINEAR = 9986;
-  //   LINEAR_MIPMAP_LINEAR = 9987;
-  // }
-  google.protobuf.Int32Value magFilter = 1;
-  google.protobuf.Int32Value minFilter = 2;
-  // enum WrapType {
-  //   WRAP_UNKNWON = 0;
-  //   CLAMP_TO_EDGE = 33071;
-  //   MIRRORED_REPEAT = 33648;
-  //   REPEAT = 10497;
-  // }
-  google.protobuf.Int32Value wrapS = 3;
-  google.protobuf.Int32Value wrapT = 4;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/scene.schema.json
-message Scene { 
-  repeated int32 nodes = 1; 
-  string name = 2;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/skin.schema.json
-// "required": [ "joints" ]
-message Skin {
-  google.protobuf.Int32Value inverseBindMatrices = 1;
-  google.protobuf.Int32Value skeleton = 2;
-  repeated int32 joints = 3;
-  string name = 4;
-}
-
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/texture.schema.json
-message Texture {
-  google.protobuf.Int32Value sampler = 1;
-  google.protobuf.Int32Value source = 2;
+  // The user-defined name of this object.
   string name = 3;
-}
 
-// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/schema/textureInfo.schema.json
-// "required": [ "index" ]
-message TextureInfo {
-  google.protobuf.Int32Value index = 1;
-  google.protobuf.Int32Value texCoord = 2;
-  message Extensions {
-    // KHR_texture_transform
-    KHRTextureTransformExtension KHR_texture_transform = 1;
+  // The index of the bufferView.
+  google.protobuf.Int32Value bufferView = 4;
+
+  // The offset relative to the start of the bufferView in bytes.
+  google.protobuf.Int32Value byteOffset = 5;
+
+  // The datatype of components in the attribute.
+  google.protobuf.Int32Value componentType = 6;
+
+  // Specifies whether integer data values should be normalized.
+  google.protobuf.BoolValue normalized = 7;
+
+  // The number of attributes referenced by this accessor.
+  google.protobuf.Int32Value count = 8;
+
+  enum accessorType {
+    SCALAR = 0;
+    VEC2 = 1;
+    VEC3 = 2;
+    VEC4 = 3;
+    MAT2 = 4;
+    MAT3 = 5;
+    MAT4 = 6;
   }
-  Extensions extensions = 3;
-}
 
-// https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_texture_transform/schema/KHR_texture_transform.textureInfo.schema.json
-message KHRTextureTransformExtension {
-  // float[2]
-  repeated float offset = 1;
-  // Rotate the UVs by this many radians counter-clockwise around the origin
-  google.protobuf.FloatValue rotation = 2;
-  // float[2]
-  repeated float scale = 3;
-  // Overrides the textureInfo texCoord value if supplied, and if this extension is supported.
+  // Specifies if the attribute is a scalar, vector, or matrix.
+  accessorType type = 9;
+
+  // Maximum value of each component in this attribute.
+  repeated float max = 10;
+
+  // Minimum value of each component in this attribute.
+  repeated float min = 11;
+
+  // Sparse storage of attributes that deviate from their initialization value.
+  AccessorSparse sparse = 12;
+}
+message AnimationChannelTarget
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The index of the node to target.
+  google.protobuf.Int32Value node = 3;
+
+  enum pathType {
+    translation = 0;
+    rotation = 1;
+    scale = 2;
+    weights = 3;
+  }
+
+  // The name of the node's TRS property to modify, or the "weights" of the Morph Targets it instantiates. For the "translation" property, the values that are provided by the sampler are the translation along the x, y, and z axes. For the "rotation" property, the values are a quaternion in the order (x, y, z, w), where w is the scalar. For the "scale" property, the values are the scaling factors along the x, y, and z axes.
+  pathType path = 4;
+}
+message AnimationChannel
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The index of a sampler in this animation used to compute the value for the target.
+  google.protobuf.Int32Value sampler = 3;
+
+  // The index of the node and TRS property to target.
+  AnimationChannelTarget target = 4;
+}
+message AnimationSampler
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The index of an accessor containing keyframe input values, e.g., time.
+  google.protobuf.Int32Value input = 3;
+
+  enum interpolationType {
+    LINEAR = 0;
+    STEP = 1;
+    CUBICSPLINE = 2;
+  }
+
+  // Interpolation algorithm.
+  interpolationType interpolation = 4;
+
+  // The index of an accessor, containing keyframe output values.
+  google.protobuf.Int32Value output = 5;
+}
+message Animation
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // An array of channels, each of which targets an animation's sampler at a node's property. Different channels of the same animation can't have equal targets.
+  repeated AnimationChannel channels = 4;
+
+  // An array of samplers that combines input and output accessors with an interpolation algorithm to define a keyframe graph (but not its target).
+  repeated AnimationSampler samplers = 5;
+}
+message Asset
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // A copyright message suitable for display to credit the content creator.
+  string copyright = 3;
+
+  // Tool that generated this glTF model.  Useful for debugging.
+  string generator = 4;
+
+  // The glTF version that this asset targets.
+  string version = 5;
+
+  // The minimum glTF version that this asset targets.
+  string minVersion = 6;
+}
+message Buffer
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The uri of the buffer.
+  string uri = 4;
+
+  // The length of the buffer in bytes.
+  google.protobuf.Int32Value byteLength = 5;
+}
+message BufferView
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The index of the buffer.
+  google.protobuf.Int32Value buffer = 4;
+
+  // The offset into the buffer in bytes.
+  google.protobuf.Int32Value byteOffset = 5;
+
+  // The total byte length of the buffer view.
+  google.protobuf.Int32Value byteLength = 6;
+
+  // The stride, in bytes.
+  google.protobuf.Int32Value byteStride = 7;
+
+  // The target that the GPU buffer should be bound to.
+  google.protobuf.Int32Value target = 8;
+}
+message CameraOrthographic
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The floating-point horizontal magnification of the view. Must not be zero.
+  google.protobuf.FloatValue xmag = 3;
+
+  // The floating-point vertical magnification of the view. Must not be zero.
+  google.protobuf.FloatValue ymag = 4;
+
+  // The floating-point distance to the far clipping plane. `zfar` must be greater than `znear`.
+  google.protobuf.FloatValue zfar = 5;
+
+  // The floating-point distance to the near clipping plane.
+  google.protobuf.FloatValue znear = 6;
+}
+message CameraPerspective
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The floating-point aspect ratio of the field of view.
+  google.protobuf.FloatValue aspectRatio = 3;
+
+  // The floating-point vertical field of view in radians.
+  google.protobuf.FloatValue yfov = 4;
+
+  // The floating-point distance to the far clipping plane.
+  google.protobuf.FloatValue zfar = 5;
+
+  // The floating-point distance to the near clipping plane.
+  google.protobuf.FloatValue znear = 6;
+}
+message Camera
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // An orthographic camera containing properties to create an orthographic projection matrix.
+  CameraOrthographic orthographic = 4;
+
+  // A perspective camera containing properties to create a perspective projection matrix.
+  CameraPerspective perspective = 5;
+
+  // Specifies if the camera uses a perspective or orthographic projection.
+  string type = 6;
+}
+message Image
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The uri of the image.
+  string uri = 4;
+
+  // The index of the bufferView that contains the image. Use this instead of the image's uri property.
+  google.protobuf.Int32Value bufferView = 5;
+
+  // The image's MIME type. Required if `bufferView` is defined.
+  string mimeType = 6;
+}
+message TextureInfo
+{
+  message KHR_texture_transformtextureInfoextension
+  {
+    message Extensions
+    {
+    }
+    message Extras
+    {
+    }
+    // Dictionary object with extension-specific objects.
+    Extensions extensions = 1;
+
+    // Application-specific data.
+    Extras extras = 2;
+
+    // The offset of the UV coordinate origin as a factor of the texture dimensions.
+    repeated float offset = 3;
+
+    // Rotate the UVs by this many radians counter-clockwise around the origin.
+    google.protobuf.FloatValue rotation = 4;
+
+    // The scale factor applied to the components of the UV coordinates.
+    repeated float scale = 5;
+
+    // Overrides the textureInfo texCoord value if supplied, and if this extension is supported.
+    google.protobuf.Int32Value texCoord = 6;
+  }
+  message Extensions
+  {
+    // glTF extension that enables shifting and scaling UV coordinates on a per-texture basis
+    KHR_texture_transformtextureInfoextension KHR_texture_transform = 1;
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The index of the texture.
+  google.protobuf.Int32Value index = 3;
+
+  // The set index of texture's TEXCOORD attribute used for texture coordinate mapping.
   google.protobuf.Int32Value texCoord = 4;
 }
+message MaterialPBRMetallicRoughness
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
 
-// https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_materials_pbrSpecularGlossiness/schema/glTF.KHR_materials_pbrSpecularGlossiness.schema.json
-message KHRMaterialsPbrSpecularGlossinessExtension {
-  // float[4], default[1.0,1.0,1.0,1.0]
-  repeated float diffuseFactor = 1;
-  // 
-  TextureInfo diffuseTexture = 2;
-  // float[3], default[1.0,1.0,1.0]
-  repeated float specularFactor = 3;
-  // 
-  google.protobuf.FloatValue glossinessFactor = 4;
+  // Application-specific data.
+  Extras extras = 2;
 
-  TextureInfo specularGlossinessTexture = 5;
+  // The material's base color factor.
+  repeated float baseColorFactor = 3;
+
+  // The base color texture.
+  TextureInfo baseColorTexture = 4;
+
+  // The metalness of the material.
+  google.protobuf.FloatValue metallicFactor = 5;
+
+  // The roughness of the material.
+  google.protobuf.FloatValue roughnessFactor = 6;
+
+  // The metallic-roughness texture.
+  TextureInfo metallicRoughnessTexture = 7;
 }
+message MaterialNormalTextureInfo
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
 
-// [END GLTF]
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The index of the texture.
+  google.protobuf.Int32Value index = 3;
+
+  // The set index of texture's TEXCOORD attribute used for texture coordinate mapping.
+  google.protobuf.Int32Value texCoord = 4;
+
+  // The scalar multiplier applied to each normal vector of the normal texture.
+  google.protobuf.FloatValue scale = 5;
+}
+message MaterialOcclusionTextureInfo
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The index of the texture.
+  google.protobuf.Int32Value index = 3;
+
+  // The set index of texture's TEXCOORD attribute used for texture coordinate mapping.
+  google.protobuf.Int32Value texCoord = 4;
+
+  // A scalar multiplier controlling the amount of occlusion applied.
+  google.protobuf.FloatValue strength = 5;
+}
+message Material
+{
+  message KHR_materials_unlitglTFextension
+  {
+    message Extensions
+    {
+    }
+    message Extras
+    {
+    }
+    // Dictionary object with extension-specific objects.
+    Extensions extensions = 1;
+
+    // Application-specific data.
+    Extras extras = 2;
+  }
+  message Extensions
+  {
+    // glTF extension that defines the unlit material model.
+    KHR_materials_unlitglTFextension KHR_materials_unlit = 1;
+
+    // 
+    VRMC_materials_mtoon VRMC_materials_mtoon = 2;
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // A set of parameter values that are used to define the metallic-roughness material model from Physically-Based Rendering (PBR) methodology. When not specified, all the default values of `pbrMetallicRoughness` apply.
+  MaterialPBRMetallicRoughness pbrMetallicRoughness = 4;
+
+  // The normal map texture.
+  MaterialNormalTextureInfo normalTexture = 5;
+
+  // The occlusion map texture.
+  MaterialOcclusionTextureInfo occlusionTexture = 6;
+
+  // The emissive map texture.
+  TextureInfo emissiveTexture = 7;
+
+  // The emissive color of the material.
+  repeated float emissiveFactor = 8;
+
+  enum alphaModeType {
+    OPAQUE = 0;
+    MASK = 1;
+    BLEND = 2;
+  }
+
+  // The alpha rendering mode of the material.
+  alphaModeType alphaMode = 9;
+
+  // The alpha cutoff value of the material.
+  google.protobuf.FloatValue alphaCutoff = 10;
+
+  // Specifies whether the material is double sided.
+  google.protobuf.BoolValue doubleSided = 11;
+}
+message target
+{
+  // 
+  google.protobuf.Int32Value POSITION = 1;
+
+  // 
+  google.protobuf.Int32Value NORMAL = 2;
+
+  // 
+  google.protobuf.Int32Value TANGENT = 3;
+}
+message MeshPrimitive
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+    // 
+    repeated string targetNames = 1;
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // A dictionary object, where each key corresponds to mesh attribute semantic and each value is the index of the accessor containing attribute's data.
+  map<string, int32> attributes = 3;
+
+  // The index of the accessor that contains the indices.
+  google.protobuf.Int32Value indices = 4;
+
+  // The index of the material to apply to this primitive when rendering.
+  google.protobuf.Int32Value material = 5;
+
+  // The type of primitives to render.
+  google.protobuf.Int32Value mode = 6;
+
+  // An array of Morph Targets, each  Morph Target is a dictionary mapping attributes (only `POSITION`, `NORMAL`, and `TANGENT` supported) to their deviations in the Morph Target.
+  repeated target targets = 7;
+}
+message Mesh
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // An array of primitives, each defining geometry to be rendered with a material.
+  repeated MeshPrimitive primitives = 4;
+
+  // Array of weights to be applied to the Morph Targets.
+  repeated float weights = 5;
+}
+message Node
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The index of the camera referenced by this node.
+  google.protobuf.Int32Value camera = 4;
+
+  // The indices of this node's children.
+  repeated int32 children = 5;
+
+  // The index of the skin referenced by this node.
+  google.protobuf.Int32Value skin = 6;
+
+  // A floating-point 4x4 transformation matrix stored in column-major order.
+  repeated float matrix = 7;
+
+  // The index of the mesh in this node.
+  google.protobuf.Int32Value mesh = 8;
+
+  // The node's unit quaternion rotation in the order (x, y, z, w), where w is the scalar.
+  repeated float rotation = 9;
+
+  // The node's non-uniform scale, given as the scaling factors along the x, y, and z axes.
+  repeated float scale = 10;
+
+  // The node's translation along the x, y, and z axes.
+  repeated float translation = 11;
+
+  // The weights of the instantiated Morph Target. Number of elements must match number of Morph Targets of used mesh.
+  repeated float weights = 12;
+}
+message Sampler
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // Magnification filter.
+  google.protobuf.Int32Value magFilter = 4;
+
+  // Minification filter.
+  google.protobuf.Int32Value minFilter = 5;
+
+  // s wrapping mode.
+  google.protobuf.Int32Value wrapS = 6;
+
+  // t wrapping mode.
+  google.protobuf.Int32Value wrapT = 7;
+}
+message Scene
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The indices of each root node.
+  repeated int32 nodes = 4;
+}
+message Skin
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The index of the accessor containing the floating-point 4x4 inverse-bind matrices.  The default is that each matrix is a 4x4 identity matrix, which implies that inverse-bind matrices were pre-applied.
+  google.protobuf.Int32Value inverseBindMatrices = 4;
+
+  // The index of the node used as a skeleton root.
+  google.protobuf.Int32Value skeleton = 5;
+
+  // Indices of skeleton nodes, used as joints in this skin.
+  repeated int32 joints = 6;
+}
+message Texture
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The index of the sampler used by this texture. When undefined, a sampler with repeat wrapping and auto filtering should be used.
+  google.protobuf.Int32Value sampler = 4;
+
+  // The index of the image used by this texture. When undefined, it is expected that an extension or other mechanism will supply an alternate texture source, otherwise behavior is undefined.
+  google.protobuf.Int32Value source = 5;
+}
+message glTF
+{
+  message Extensions
+  {
+    // 
+    VRMCVrm VRMC_vrm = 1;
+
+    // SpringBone makes objects such as costumes and hair swaying
+    VRMCSpringBone VRMC_springBone = 2;
+
+    // Specification undecided in draft state
+    VRMCConstraint VRMC_constraint = 3;
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // Names of glTF extensions used somewhere in this asset.
+  repeated string extensionsUsed = 3;
+
+  // Names of glTF extensions required to properly load this asset.
+  repeated string extensionsRequired = 4;
+
+  // An array of accessors.
+  repeated Accessor accessors = 5;
+
+  // An array of keyframe animations.
+  repeated Animation animations = 6;
+
+  // Metadata about the glTF asset.
+  Asset asset = 7;
+
+  // An array of buffers.
+  repeated Buffer buffers = 8;
+
+  // An array of bufferViews.
+  repeated BufferView bufferViews = 9;
+
+  // An array of cameras.
+  repeated Camera cameras = 10;
+
+  // An array of images.
+  repeated Image images = 11;
+
+  // An array of materials.
+  repeated Material materials = 12;
+
+  // An array of meshes.
+  repeated Mesh meshes = 13;
+
+  // An array of nodes.
+  repeated Node nodes = 14;
+
+  // An array of samplers.
+  repeated Sampler samplers = 15;
+
+  // The index of the default scene.
+  google.protobuf.Int32Value scene = 16;
+
+  // An array of scenes.
+  repeated Scene scenes = 17;
+
+  // An array of skins.
+  repeated Skin skins = 18;
+
+  // An array of textures.
+  repeated Texture textures = 19;
+}

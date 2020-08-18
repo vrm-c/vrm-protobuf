@@ -1,19 +1,431 @@
 syntax = "proto3";
 package VrmProtobuf;
+import "google/protobuf/wrappers.proto";
 
-import "meta.proto";
-import "humanoid.proto";
-import "firstPerson.proto";
-import "lookAt.proto";
-import "blendShape.proto";
+message Meta
+{
+  // Describe the name of the avatar model
+  string name = 1;
 
+  // Describe the version that creates the model
+  string version = 2;
+
+  // Describe the name of the author of the model
+  repeated string authors = 3;
+
+  // 
+  string copyrights = 4;
+
+  // Describe the contact information of the author
+  string contactInformation = 5;
+
+  // Describe original / related works of the avatar  ( URL )  ,  if any
+  string reference = 6;
+
+  // The index to access the thumbnail image of the avatar model in gltf.images. The texture resolution of 1024x1024 is recommended. It must be square. This is for the application to use as an icon.
+  google.protobuf.Int32Value thumbnailImage = 7;
+
+  enum AvatarPermissionType {
+    OnlyAuthor = 0;
+    ExplicitlyLicensedPerson = 1;
+    Everyone = 2;
+  }
+
+  // A person who can perform with this avatars
+  AvatarPermissionType avatarPermission = 8;
+
+  // Perform violent acts with this avatar
+  google.protobuf.BoolValue violentUsage = 9;
+
+  // Perform sexual acts with this avatar
+  google.protobuf.BoolValue sexualUsage = 10;
+
+  // 
+  google.protobuf.BoolValue gameUsage = 11;
+
+  enum CommercialUsageType {
+    PersonalNonCommercialNonProfit = 0;
+    PersonalNonCommercialProfit = 1;
+    PersonalCommercial = 2;
+    Corporation = 3;
+  }
+
+  // Commercial use
+  CommercialUsageType commercialUsage = 12;
+
+  // 
+  google.protobuf.BoolValue politicalOrReligiousUsage = 13;
+
+  // Describe the URL links of license with regard to other permissions
+  string otherPermissionUrl = 14;
+
+  enum CreditNotationType {
+    Required = 0;
+    Unnecessary = 1;
+    Abandoned = 2;
+  }
+
+  // 
+  CreditNotationType creditNotation = 15;
+
+  // 
+  google.protobuf.BoolValue allowRedistribution = 16;
+
+  enum ModifyType {
+    Prohibited = 0;
+    Inherited = 1;
+    NotInherited = 2;
+  }
+
+  // 
+  ModifyType modify = 17;
+
+  // Describe the URL links of other license
+  string otherLicenseUrl = 18;
+}
+message HumanBone
+{
+  // Represents a single glTF node tied to this humanBone.
+  google.protobuf.Int32Value node = 1;
+}
+message HumanBones
+{
+  // Represents a single bone of a Humanoid.
+  HumanBone hips = 1;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone spine = 2;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone chest = 3;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone upperChest = 4;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone neck = 5;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone head = 6;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftEye = 7;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightEye = 8;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone jaw = 9;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftUpperLeg = 10;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftLowerLeg = 11;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftFoot = 12;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftToes = 13;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightUpperLeg = 14;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightLowerLeg = 15;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightFoot = 16;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightToes = 17;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftShoulder = 18;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftUpperArm = 19;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftLowerArm = 20;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftHand = 21;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightShoulder = 22;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightUpperArm = 23;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightLowerArm = 24;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightHand = 25;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftThumbProximal = 26;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftThumbIntermediate = 27;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftThumbDistal = 28;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftIndexProximal = 29;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftIndexIntermediate = 30;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftIndexDistal = 31;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftMiddleProximal = 32;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftMiddleIntermediate = 33;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftMiddleDistal = 34;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftRingProximal = 35;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftRingIntermediate = 36;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftRingDistal = 37;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftLittleProximal = 38;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftLittleIntermediate = 39;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone leftLittleDistal = 40;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightThumbProximal = 41;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightThumbIntermediate = 42;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightThumbDistal = 43;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightIndexProximal = 44;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightIndexIntermediate = 45;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightIndexDistal = 46;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightMiddleProximal = 47;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightMiddleIntermediate = 48;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightMiddleDistal = 49;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightRingProximal = 50;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightRingIntermediate = 51;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightRingDistal = 52;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightLittleProximal = 53;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightLittleIntermediate = 54;
+
+  // Represents a single bone of a Humanoid.
+  HumanBone rightLittleDistal = 55;
+}
+message Humanoid
+{
+  // Represents a set of humanBones of a humanoid.
+  HumanBones humanBones = 1;
+}
+message MeshAnnotation
+{
+  // Specify mesh
+  google.protobuf.Int32Value mesh = 1;
+
+  enum FirstPersonType {
+    auto = 0;
+    both = 1;
+    thirdPersonOnly = 2;
+    firstPersonOnly = 3;
+  }
+
+  // Mesh rendering mode
+  FirstPersonType firstPersonType = 2;
+}
+message FirstPerson
+{
+  // Mesh rendering annotation for cameras. 'required' :   [  'mesh' ,  'firstPersonType'  ]
+  repeated MeshAnnotation meshAnnotations = 1;
+}
+message LookAtRangeMap
+{
+  // Yaw and pitch angles  ( degrees )  between the head bone forward vector and the eye gaze LookAt vector
+  google.protobuf.FloatValue inputMaxValue = 1;
+
+  // Degree for LookAtType.bone ,  Weight for LookAtType.blendShape
+  google.protobuf.FloatValue outputScale = 2;
+}
+message LookAt
+{
+  // The origin of LookAt. Position offset from the head bone
+  repeated float offsetFromHeadBone = 1;
+
+  enum LookAtType {
+    bone = 0;
+    blendShape = 1;
+  }
+
+  // 
+  LookAtType lookAtType = 2;
+
+  // Horizontal inward movement. The left eye moves right. The right eye moves left.
+  LookAtRangeMap lookAtHorizontalInner = 3;
+
+  // Horizontal outward movement. The left eye moves left. The right eye moves right.
+  LookAtRangeMap lookAtHorizontalOuter = 4;
+
+  // Vertical downward movement. Both eyes move upwards
+  LookAtRangeMap lookAtVerticalDown = 5;
+
+  // Vertical upward movement. Both eyes move downwards
+  LookAtRangeMap lookAtVerticalUp = 6;
+}
+message BlendShapeBind
+{
+  // 
+  google.protobuf.Int32Value mesh = 1;
+
+  // 
+  google.protobuf.Int32Value index = 2;
+
+  // 
+  google.protobuf.FloatValue weight = 3;
+}
+message MaterialValue
+{
+  // 
+  google.protobuf.Int32Value material = 1;
+
+  enum MaterialValueType {
+    color = 0;
+    emissionColor = 1;
+    shadeColor = 2;
+    rimColor = 3;
+    outlineColor = 4;
+  }
+
+  // 
+  MaterialValueType type = 2;
+
+  // 
+  repeated float targetValue = 3;
+}
+message MaterialUVBind
+{
+  // 
+  google.protobuf.Int32Value material = 1;
+
+  // uv scaling for TEXCOORD_0
+  repeated float scaling = 2;
+
+  // uv offset for TEXCOORD_0
+  repeated float offset = 3;
+}
+message BlendShapeGroup
+{
+  // 
+  string name = 1;
+
+  enum BlendShapePreset {
+    custom = 0;
+    aa = 1;
+    ih = 2;
+    ou = 3;
+    ee = 4;
+    oh = 5;
+    blink = 6;
+    joy = 7;
+    angry = 8;
+    sorrow = 9;
+    fun = 10;
+    lookUp = 11;
+    lookDown = 12;
+    lookLeft = 13;
+    lookRight = 14;
+    blinkLeft = 15;
+    blinkRight = 16;
+    neutral = 17;
+  }
+
+  // Functions of BlendShapeGroup
+  BlendShapePreset preset = 2;
+
+  // Specify a morph target. 'required' :   [  'mesh' ,  'index' ,  'weight'  ]
+  repeated BlendShapeBind binds = 3;
+
+  // Material animation references. 'required' :   [  'material' ,  'type' ,  'targetValue'  ]
+  repeated MaterialValue materialValues = 4;
+
+  // Texture uv animation references
+  repeated MaterialUVBind materialUVBinds = 5;
+
+  // Interpret non-zero values as 1
+  google.protobuf.BoolValue isBinary = 6;
+
+  // Disable Blink when this BlendShapeGroup is enabled
+  google.protobuf.BoolValue ignoreBlink = 7;
+
+  // Disable LookAt when this BlendShapeGroup is enabled
+  google.protobuf.BoolValue ignoreLookAt = 8;
+
+  // Disable Mouth when this BlendShapeGroup is enabled
+  google.protobuf.BoolValue ignoreMouth = 9;
+}
+message BlendShape
+{
+  // 
+  repeated BlendShapeGroup blendShapeGroups = 1;
+}
 message VRMCVrm
 {
+  // 
   string specVersion = 1;
 
+  // 
   Meta meta = 2;
+
+  // Correspondence between nodes and human bones
   Humanoid humanoid = 3;
+
+  // First-person perspective settings
   FirstPerson firstPerson = 4;
+
+  // Eye gaze control
   LookAt lookAt = 5;
+
+  // Create animation  ( morph target & material color & texture offset )
   BlendShape blendShape = 6;
 }
