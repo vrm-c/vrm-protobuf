@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Vrm.JsonScheme;
+using Vrm.JsonSchema;
 
 namespace ProtoGenerator
 {

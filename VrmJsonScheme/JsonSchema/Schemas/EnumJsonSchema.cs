@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Vrm.JsonScheme.Schemas
+namespace Vrm.JsonSchema.Schemas
 {
     public struct EnumValue
     {

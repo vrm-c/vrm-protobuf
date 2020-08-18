@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Vrm.JsonScheme
+namespace Vrm.JsonSchema
 {
     /// <summary>
     /// JSON上の配列参照を列挙する

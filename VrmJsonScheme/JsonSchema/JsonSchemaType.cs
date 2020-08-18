@@ -1,4 +1,4 @@
-namespace Vrm.JsonScheme
+namespace Vrm.JsonSchema
 {
     public enum JsonSchemaType
     {

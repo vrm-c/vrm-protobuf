@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using Vrm.JsonScheme;
+using Vrm.JsonSchema;
 
 namespace ProtoGenerator
 {

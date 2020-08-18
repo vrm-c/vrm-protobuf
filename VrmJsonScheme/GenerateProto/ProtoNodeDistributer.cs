@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Vrm.JsonScheme;
+using Vrm.JsonSchema;
 
 namespace ProtoGenerator
 {
@@ -47,7 +47,7 @@ namespace ProtoGenerator
                 Generator.Fix(source);
 
                 var (path, parent) = GetFilePath(source.JsonPath);
-                var obj = source.Create() as Vrm.JsonScheme.Schemas.ObjectJsonSchema;
+                var obj = source.Create() as Vrm.JsonSchema.Schemas.ObjectJsonSchema;
                 if (obj != null)
                 {
                     node = new ProtoNode(path, obj);

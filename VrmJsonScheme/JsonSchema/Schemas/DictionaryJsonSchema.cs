@@ -1,6 +1,6 @@
 using System;
 
-namespace Vrm.JsonScheme.Schemas
+namespace Vrm.JsonSchema.Schemas
 {
     public class DictionaryJsonSchema : JsonSchemaBase
     {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Vrm.JsonScheme;
-using Vrm.JsonScheme.Schemas;
+using Vrm.JsonSchema;
+using Vrm.JsonSchema.Schemas;
 
 namespace ProtoGenerator
 {

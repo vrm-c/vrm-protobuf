@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Vrm.JsonScheme
+namespace Vrm.JsonSchema
 {
     /// <summary>
     /// 型が確定する前にパースして値を集める
