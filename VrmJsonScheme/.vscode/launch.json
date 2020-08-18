@@ -36,5 +36,56 @@
       "console": "internalConsole",
       "stopAtEntry": false
     },
+    {
+      "name": "GenerateValidator",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/GenerateValidator/bin/Debug/netcoreapp3.1/GenerateValidator.dll",
+      "args": [
+        "${workspaceFolder}/../_external/glTF/specification/2.0/schema/glTF.schema.json", // root 
+        "${workspaceFolder}/Validator/Generated", // dst
+        // extensions
+        ".meshes[].primitives[].extensions.KHR_draco_mesh_compression",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Khronos/KHR_draco_mesh_compression/schema/node.KHR_draco_mesh_compression.schema.json",
+        //
+        ".materials[].extensions.KHR_materials_pbrSpecularGlossiness",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Khronos/KHR_materials_pbrSpecularGlossiness/schema/glTF.KHR_materials_pbrSpecularGlossiness.schema.json",
+        //
+        ".materials[].pbrMetallicRoughness.baseColorTexture.extensions.KHR_texture_transform",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Khronos/KHR_texture_transform/schema/KHR_texture_transform.textureInfo.schema.json",
+        ".materials[].pbrMetallicRoughness.metallicRoughnessTexture.extensions.KHR_texture_transform",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Khronos/KHR_texture_transform/schema/KHR_texture_transform.textureInfo.schema.json",
+        ".materials[].normalTexture.extensions.KHR_texture_transform",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Khronos/KHR_texture_transform/schema/KHR_texture_transform.textureInfo.schema.json",
+        ".materials[].emissiveTexture.extensions.KHR_texture_transform",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Khronos/KHR_texture_transform/schema/KHR_texture_transform.textureInfo.schema.json",
+        //
+        ".scenes[].extensions.EXT_lights_image_based",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Vendor/EXT_lights_image_based/schema/scene.EXT_lights_image_based.schema.json",
+        ".extensions.EXT_lights_image_based",
+        "${workspaceFolder}/../_external/glTF/extensions/2.0/Vendor/EXT_lights_image_based/schema/glTF.EXT_lights_image_based.schema.json",
+        // VRM
+        ".extensions.VRM",
+        "${workspaceFolder}/../_external/vrm-specification/specification/0.0/schema/vrm.schema.json",
+      ],
+      "cwd": "${workspaceFolder}/GenerateValidator",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Validate",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/ValidatorCli/bin/Debug/netcoreapp3.1/ValidatorCli.dll",
+      "args": [
+        "${env:GLTF_SAMPLE_MODELS}/2.0/Box/glTF/Box.gltf",
+        "${env:GLTF_SAMPLE_MODELS}/2.0/Box/glTF-Binary/Box.glb",
+      ],
+      "cwd": "${workspaceFolder}/Validator",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
   ]
 }
