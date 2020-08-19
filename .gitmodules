@@ -1,0 +1,6 @@
+[submodule "_external/glTF"]
+	path = _external/glTF
+	url = https://github.com/KhronosGroup/glTF.git
+[submodule "_external/vrm-specification"]
+	path = _external/vrm-specification
+	url = https://github.com/vrm-c/vrm-specification.git
