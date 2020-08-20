@@ -262,8 +262,8 @@ message Humanoid
 }
 message MeshAnnotation
 {
-  // Specify mesh
-  google.protobuf.Int32Value mesh = 1;
+  // The index of the node that attached to target mesh.
+  google.protobuf.Int32Value node = 1;
 
   enum FirstPersonType {
     auto = 0;
@@ -272,7 +272,7 @@ message MeshAnnotation
     firstPersonOnly = 3;
   }
 
-  // Mesh rendering mode
+  // How the camera interprets the mesh.
   FirstPersonType firstPersonType = 2;
 }
 message FirstPerson
@@ -315,13 +315,13 @@ message LookAt
 }
 message BlendShapeBind
 {
-  // 
-  google.protobuf.Int32Value mesh = 1;
+  // The index of the node that attached to target mesh.
+  google.protobuf.Int32Value node = 1;
 
-  // 
+  // The index of the morph target in the mesh.
   google.protobuf.Int32Value index = 2;
 
-  // 
+  // The weight value of target morph target.
   google.protobuf.FloatValue weight = 3;
 }
 message MaterialValue
