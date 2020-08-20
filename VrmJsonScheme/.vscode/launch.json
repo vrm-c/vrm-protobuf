@@ -25,6 +25,9 @@
         // mtoon
         ".materials[].extensions.VRMC_materials_mtoon",
         "${workspaceFolder}/../_external/vrm-specification/specification/VRMC_materials_mtoon-1.0_draft/schema/VRMC_materials_mtoon.schema.json",
+        // collider shape
+        ".nodes[].extensions.VRMC_node_collider",
+        "${workspaceFolder}/../_external/vrm-specification/specification/VRMC_node_collider_1.0_draft/schema/VRMC_node_collider.json",
         // spring bone
         ".extensions.VRMC_springBone",
         "${workspaceFolder}/../_external/vrm-specification/specification/VRMC_springBone-1.0_draft/schema/VRMC_springBone.schema.json",

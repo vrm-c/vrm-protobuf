@@ -5,6 +5,7 @@ import "VRMC_vrm.proto";
 import "VRMC_springBone.proto";
 import "VRMC_constraint.proto";
 import "VRMC_materials_mtoon.proto";
+import "VRMC_node_collider.proto";
 
 message AccessorSparseIndices
 {
@@ -668,6 +669,8 @@ message Node
 {
   message Extensions
   {
+    // collider definition for SpringBone
+    VRMC_node_collider VRMC_node_collider = 1;
   }
   message Extras
   {
