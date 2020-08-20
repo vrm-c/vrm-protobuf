@@ -15,6 +15,7 @@ namespace ProtoGenerator
         {
             {".materials[].extensions.VRMC_materials_mtoon", ("VRMC_materials_mtoon.proto", "glTF.proto")},
             {".extensions.VRMC_vrm", ("VRMC_vrm.proto", "glTF.proto")},
+            {".nodes[].extensions.VRMC_node_collider", ("VRMC_node_collider.proto", "glTF.proto")},
             {".extensions.VRMC_springBone", ("VRMC_springBone.proto", "glTF.proto")},
             {".extensions.VRMC_constraint", ("VRMC_constraint.proto", "glTF.proto")},
         };
