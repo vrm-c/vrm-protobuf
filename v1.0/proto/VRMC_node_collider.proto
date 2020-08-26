@@ -2,24 +2,27 @@ syntax = "proto3";
 package VrmProtobuf;
 import "google/protobuf/wrappers.proto";
 
-message 
-{
+message Sphere {
   // The sphere center. vector3
   repeated float offset = 1;
 
   // The sphere radius
   google.protobuf.FloatValue radius = 2;
 }
-message ColliderShape
-{
-  // 
-   sphere = 1;
+message Capsule {
+  // The sphere center. vector3
+  repeated float offset = 1;
 
-  // 
-   capsule = 2;
+  // The sphere radius
+  google.protobuf.FloatValue radius = 2;
+
+  repeated float tail = 3;
 }
-message VRMC_node_collider
-{
-  // 
+message ColliderShape {
+  Sphere sphere = 1;
+  Capsule capsule = 2;
+}
+message VRMC_node_collider {
+  //
   repeated ColliderShape shapes = 1;
 }
