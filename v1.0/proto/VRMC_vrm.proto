@@ -4,26 +4,29 @@ import "google/protobuf/wrappers.proto";
 
 message Meta
 {
-  // Describe the name of the avatar model
+  // The name of the model
   string name = 1;
 
-  // Describe the version that creates the model
+  // The version of the model
   string version = 2;
 
-  // Describe the name of the author of the model
+  // Authors of the model
   repeated string authors = 3;
 
-  // 
-  string copyrights = 4;
+  // An information that describes the copyright of the model
+  string copyrightInformation = 4;
 
-  // Describe the contact information of the author
+  // An information that describes the contact information of the author
   string contactInformation = 5;
 
-  // Describe original / related works of the avatar  ( URL )  ,  if any
-  string reference = 6;
+  // References / original works of the model
+  repeated string references = 6;
 
-  // The index to access the thumbnail image of the avatar model in gltf.images. The texture resolution of 1024x1024 is recommended. It must be square. This is for the application to use as an icon.
-  google.protobuf.Int32Value thumbnailImage = 7;
+  // Third party licenses of the model, if required. You can use line breaks
+  string thirdPartyLicenses = 7;
+
+  // The index to access the thumbnail image of the avatar model in gltf.images. The texture resolution of 1024x1024 is recommended. It must be square. Preferable resolution is 1024 x 1024. This is for the application to use as an icon.
+  google.protobuf.Int32Value thumbnailImage = 8;
 
   enum AvatarPermissionType {
     OnlyAuthor = 0;
@@ -32,16 +35,16 @@ message Meta
   }
 
   // A person who can perform with this avatars
-  AvatarPermissionType avatarPermission = 8;
+  AvatarPermissionType avatarPermission = 9;
 
   // Perform violent acts with this avatar
-  google.protobuf.BoolValue violentUsage = 9;
+  google.protobuf.BoolValue violentUsage = 10;
 
   // Perform sexual acts with this avatar
-  google.protobuf.BoolValue sexualUsage = 10;
+  google.protobuf.BoolValue sexualUsage = 11;
 
   // 
-  google.protobuf.BoolValue gameUsage = 11;
+  google.protobuf.BoolValue gameUsage = 12;
 
   enum CommercialUsageType {
     PersonalNonCommercialNonProfit = 0;
@@ -51,13 +54,13 @@ message Meta
   }
 
   // Commercial use
-  CommercialUsageType commercialUsage = 12;
+  CommercialUsageType commercialUsage = 13;
 
   // 
-  google.protobuf.BoolValue politicalOrReligiousUsage = 13;
+  google.protobuf.BoolValue politicalOrReligiousUsage = 14;
 
   // Describe the URL links of license with regard to other permissions
-  string otherPermissionUrl = 14;
+  string otherPermissionUrl = 15;
 
   enum CreditNotationType {
     Required = 0;
@@ -66,10 +69,10 @@ message Meta
   }
 
   // 
-  CreditNotationType creditNotation = 15;
+  CreditNotationType creditNotation = 16;
 
   // 
-  google.protobuf.BoolValue allowRedistribution = 16;
+  google.protobuf.BoolValue allowRedistribution = 17;
 
   enum ModifyType {
     Prohibited = 0;
@@ -78,10 +81,10 @@ message Meta
   }
 
   // 
-  ModifyType modify = 17;
+  ModifyType modify = 18;
 
   // Describe the URL links of other license
-  string otherLicenseUrl = 18;
+  string otherLicenseUrl = 19;
 }
 message HumanBone
 {
@@ -313,7 +316,7 @@ message LookAt
   // Vertical upward movement. Both eyes move downwards
   LookAtRangeMap lookAtVerticalUp = 6;
 }
-message BlendShapeBind
+message MorphTargetBind
 {
   // The index of the node that attached to target mesh.
   google.protobuf.Int32Value node = 1;
@@ -324,12 +327,12 @@ message BlendShapeBind
   // The weight value of target morph target.
   google.protobuf.FloatValue weight = 3;
 }
-message MaterialValue
+message MaterialColorBind
 {
-  // 
+  // target material
   google.protobuf.Int32Value material = 1;
 
-  enum MaterialValueType {
+  enum MaterialColorType {
     color = 0;
     emissionColor = 1;
     shadeColor = 2;
@@ -338,14 +341,14 @@ message MaterialValue
   }
 
   // 
-  MaterialValueType type = 2;
+  MaterialColorType type = 2;
 
-  // 
+  // target color
   repeated float targetValue = 3;
 }
-message MaterialUVBind
+message TextureTransformBind
 {
-  // 
+  // target material
   google.protobuf.Int32Value material = 1;
 
   // uv scaling for TEXCOORD_0
@@ -354,12 +357,12 @@ message MaterialUVBind
   // uv offset for TEXCOORD_0
   repeated float offset = 3;
 }
-message BlendShapeGroup
+message Expression
 {
-  // 
+  // Use only if the preset is custom. Unique within the model
   string name = 1;
 
-  enum BlendShapePreset {
+  enum ExpressionPreset {
     custom = 0;
     aa = 1;
     ih = 2;
@@ -380,34 +383,29 @@ message BlendShapeGroup
     neutral = 17;
   }
 
-  // Functions of BlendShapeGroup
-  BlendShapePreset preset = 2;
+  // Functions of Expression
+  ExpressionPreset preset = 2;
 
   // Specify a morph target. 'required' :   [  'mesh' ,  'index' ,  'weight'  ]
-  repeated BlendShapeBind binds = 3;
+  repeated MorphTargetBind morphTargetBinds = 3;
 
-  // Material animation references. 'required' :   [  'material' ,  'type' ,  'targetValue'  ]
-  repeated MaterialValue materialValues = 4;
+  // Material color animation references. 'required' :   [  'material' ,  'type' ,  'targetValue'  ]
+  repeated MaterialColorBind materialColorBinds = 4;
 
-  // Texture uv animation references
-  repeated MaterialUVBind materialUVBinds = 5;
+  // Texture transform animation references
+  repeated TextureTransformBind textureTransformBinds = 5;
 
   // Interpret non-zero values as 1
   google.protobuf.BoolValue isBinary = 6;
 
-  // Disable Blink when this BlendShapeGroup is enabled
+  // Disable Blink when this Expression is enabled
   google.protobuf.BoolValue ignoreBlink = 7;
 
-  // Disable LookAt when this BlendShapeGroup is enabled
+  // Disable LookAt when this Expression is enabled
   google.protobuf.BoolValue ignoreLookAt = 8;
 
-  // Disable Mouth when this BlendShapeGroup is enabled
+  // Disable Mouth when this Expression is enabled
   google.protobuf.BoolValue ignoreMouth = 9;
-}
-message BlendShape
-{
-  // 
-  repeated BlendShapeGroup blendShapeGroups = 1;
 }
 message VRMCVrm
 {
@@ -426,6 +424,6 @@ message VRMCVrm
   // Eye gaze control
   LookAt lookAt = 5;
 
-  // Create animation  ( morph target & material color & texture offset )
-  BlendShape blendShape = 6;
+  // Definitions of expressions
+  repeated Expression expressions = 6;
 }
