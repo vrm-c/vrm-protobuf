@@ -94,6 +94,10 @@ namespace Vrm.JsonSchema
             {
                 dst.AddProperty(k, v);
             }
+            if (src.enumStringValues != null)
+            {
+                dst.enumStringValues = src.enumStringValues.ToArray();
+            }
         }
 
         JsonSchemaSource Parse(JsonElement json, string jsonPath)

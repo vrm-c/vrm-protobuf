@@ -3,7 +3,7 @@ package VrmProtobuf;
 import "google/protobuf/wrappers.proto";
 import "VRMC_vrm.proto";
 import "VRMC_springBone.proto";
-import "VRMC_constraint.proto";
+import "VRMC_constraints.proto";
 import "VRMC_materials_mtoon.proto";
 import "VRMC_node_collider.proto";
 
@@ -819,8 +819,8 @@ message glTF
     // SpringBone makes objects such as costumes and hair swaying
     VRMCSpringBone VRMC_springBone = 2;
 
-    // Specification undecided in draft state
-    VRMCConstraint VRMC_constraint = 3;
+    // glTF extension that defines constraints.
+    VRMC_constraintsextension VRMC_constraints = 3;
   }
   message Extras
   {

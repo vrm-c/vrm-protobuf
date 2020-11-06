@@ -32,8 +32,8 @@
         ".extensions.VRMC_springBone",
         "${workspaceFolder}/../_external/vrm-specification/specification/VRMC_springBone-1.0_draft/schema/VRMC_springBone.schema.json",
         // constraint
-        ".extensions.VRMC_constraint",
-        "${workspaceFolder}/../_external/vrm-specification/specification/VRMC_constraint-1.0_draft/schema/VRMC_constraint.schema.json",
+        ".extensions.VRMC_constraints",
+        "${workspaceFolder}/../_external/vrm-specification/specification/VRMC_constraints-1.0_draft/schema/VRMC_constraints.schema.json",
       ],
       "cwd": "${workspaceFolder}/GenerateProto",
       "console": "internalConsole",

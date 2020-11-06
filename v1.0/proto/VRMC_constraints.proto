@@ -1,0 +1,159 @@
+syntax = "proto3";
+package VrmProtobuf;
+import "google/protobuf/wrappers.proto";
+
+message PositionConstraint
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The index of the node constrains the node.
+  google.protobuf.Int32Value source = 4;
+
+  enum Object Space {
+    MODEL = 0;
+    LOCAL = 1;
+  }
+
+  // The source node will be evaluated in this space.
+  Object Space sourceSpace = 5;
+
+  enum Object Space {
+    MODEL = 0;
+    LOCAL = 1;
+  }
+
+  // The destination node will be evaluated in this space.
+  Object Space destinationSpace = 6;
+
+  // Axes be constrained by this constraint, in X-Y-Z order.
+  repeated bool freezeAxes = 7;
+
+  // The weight of the constraint.
+  google.protobuf.FloatValue weight = 8;
+}
+message RotationConstraint
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The index of the node constrains the node.
+  google.protobuf.Int32Value source = 4;
+
+  enum Object Space {
+    MODEL = 0;
+    LOCAL = 1;
+  }
+
+  // The source node will be evaluated in this space.
+  Object Space sourceSpace = 5;
+
+  enum Object Space {
+    MODEL = 0;
+    LOCAL = 1;
+  }
+
+  // The destination node will be evaluated in this space.
+  Object Space destinationSpace = 6;
+
+  // Axes be constrained by this constraint, in X-Y-Z order.
+  repeated bool freezeAxes = 7;
+
+  // The weight of the constraint.
+  google.protobuf.FloatValue weight = 8;
+}
+message AimConstraint
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // The user-defined name of this object.
+  string name = 3;
+
+  // The index of the node constrains the node.
+  google.protobuf.Int32Value source = 4;
+
+  enum Object Space {
+    MODEL = 0;
+    LOCAL = 1;
+  }
+
+  // The source node will be evaluated in this space.
+  Object Space sourceSpace = 5;
+
+  enum Object Space {
+    MODEL = 0;
+    LOCAL = 1;
+  }
+
+  // The destination node will be evaluated in this space.
+  Object Space destinationSpace = 6;
+
+  // An axis which faces the direction of its sources.
+  repeated float aimVector = 7;
+
+  // An up axis of the constraint.
+  repeated float upVector = 8;
+
+  // Axes be constrained by this constraint, in Yaw-Pitch order.
+  repeated bool freezeAxes = 9;
+
+  // The weight of the constraint.
+  google.protobuf.FloatValue weight = 10;
+}
+message VRMC_constraintsextension
+{
+  message Extensions
+  {
+  }
+  message Extras
+  {
+  }
+  // Dictionary object with extension-specific objects.
+  Extensions extensions = 1;
+
+  // Application-specific data.
+  Extras extras = 2;
+
+  // A constraint that links the position with sources.
+  PositionConstraint position = 3;
+
+  // A constraint that links the rotation with sources.
+  RotationConstraint rotation = 4;
+
+  // A constraint that rotates the node to face sources.
+  AimConstraint aim = 5;
+}
