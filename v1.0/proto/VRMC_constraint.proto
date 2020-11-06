@@ -1,7 +1,0 @@
-syntax = "proto3";
-package VrmProtobuf;
-import "google/protobuf/wrappers.proto";
-
-message VRMCConstraint
-{
-}

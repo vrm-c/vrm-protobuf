@@ -13,6 +13,8 @@
 
 ### GenerateValidator
 
+`.vscode/launch.json` の `GenerateProto` で生成する。
+
 ### VrmValidator
 
 VrmのJson部分をValidateする

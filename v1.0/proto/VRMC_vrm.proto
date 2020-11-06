@@ -370,17 +370,18 @@ message Expression
     ee = 4;
     oh = 5;
     blink = 6;
-    joy = 7;
+    happy = 7;
     angry = 8;
-    sorrow = 9;
-    fun = 10;
+    sad = 9;
+    relaxed = 10;
     lookUp = 11;
-    lookDown = 12;
-    lookLeft = 13;
-    lookRight = 14;
-    blinkLeft = 15;
-    blinkRight = 16;
-    neutral = 17;
+    surprised = 12;
+    lookDown = 13;
+    lookLeft = 14;
+    lookRight = 15;
+    blinkLeft = 16;
+    blinkRight = 17;
+    neutral = 18;
   }
 
   // Functions of Expression
