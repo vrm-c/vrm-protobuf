@@ -133,6 +133,8 @@ namespace ProtoGenerator
                 }
             }
 
+            var usedEnumName = new HashSet<string>();
+
             foreach (var kv in Schema.Properties)
             {
                 if (kv.Value is null)
@@ -142,14 +144,21 @@ namespace ProtoGenerator
 
                 if (kv.Value is EnumStringJsonSchema enumSchema)
                 {
-                    w.WriteLine();
-                    w.WriteLine($"{indent}  enum {GetProtoType(enumSchema, true)} {{");
-                    int i = 0;
-                    foreach (var value in enumSchema.Values)
+                    var enumName = GetProtoType(enumSchema, true);
+                    if (!usedEnumName.Contains(enumName))
                     {
-                        w.WriteLine($"{indent}    {value} = {i++};");
+                        // unique enum
+                        usedEnumName.Add(enumName);
+                        w.WriteLine();
+                        w.WriteLine($"{indent}  enum {enumName} {{");
+
+                        int i = 0;
+                        foreach (var value in enumSchema.Values)
+                        {
+                            w.WriteLine($"{indent}    {value} = {i++};");
+                        }
+                        w.WriteLine($"{indent}  }}");
                     }
-                    w.WriteLine($"{indent}  }}");
                 }
 
                 if (id > 1)
@@ -183,7 +192,7 @@ namespace ProtoGenerator
                 case JsonSchemaType.EnumString:
                     if (!string.IsNullOrEmpty(s.Title))
                     {
-                        return s.Title;
+                        return s.Title.Replace(" ", "");
                     }
                     else
                     {

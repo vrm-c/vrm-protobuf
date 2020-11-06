@@ -22,21 +22,16 @@ message PositionConstraint
   // The index of the node constrains the node.
   google.protobuf.Int32Value source = 4;
 
-  enum Object Space {
+  enum ObjectSpace {
     MODEL = 0;
     LOCAL = 1;
   }
 
   // The source node will be evaluated in this space.
-  Object Space sourceSpace = 5;
-
-  enum Object Space {
-    MODEL = 0;
-    LOCAL = 1;
-  }
+  ObjectSpace sourceSpace = 5;
 
   // The destination node will be evaluated in this space.
-  Object Space destinationSpace = 6;
+  ObjectSpace destinationSpace = 6;
 
   // Axes be constrained by this constraint, in X-Y-Z order.
   repeated bool freezeAxes = 7;
@@ -64,21 +59,16 @@ message RotationConstraint
   // The index of the node constrains the node.
   google.protobuf.Int32Value source = 4;
 
-  enum Object Space {
+  enum ObjectSpace {
     MODEL = 0;
     LOCAL = 1;
   }
 
   // The source node will be evaluated in this space.
-  Object Space sourceSpace = 5;
-
-  enum Object Space {
-    MODEL = 0;
-    LOCAL = 1;
-  }
+  ObjectSpace sourceSpace = 5;
 
   // The destination node will be evaluated in this space.
-  Object Space destinationSpace = 6;
+  ObjectSpace destinationSpace = 6;
 
   // Axes be constrained by this constraint, in X-Y-Z order.
   repeated bool freezeAxes = 7;
@@ -106,21 +96,16 @@ message AimConstraint
   // The index of the node constrains the node.
   google.protobuf.Int32Value source = 4;
 
-  enum Object Space {
+  enum ObjectSpace {
     MODEL = 0;
     LOCAL = 1;
   }
 
   // The source node will be evaluated in this space.
-  Object Space sourceSpace = 5;
-
-  enum Object Space {
-    MODEL = 0;
-    LOCAL = 1;
-  }
+  ObjectSpace sourceSpace = 5;
 
   // The destination node will be evaluated in this space.
-  Object Space destinationSpace = 6;
+  ObjectSpace destinationSpace = 6;
 
   // An axis which faces the direction of its sources.
   repeated float aimVector = 7;
