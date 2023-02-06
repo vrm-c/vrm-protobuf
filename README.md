@@ -1,3 +1,10 @@
+# DEPRECATED
+This repository was trial implementation of vrm-1.0.
+Go to https://github.com/vrm-c/UniVRM
+
+---
+
+
 # vrm-protobuf
 
 このリポジトリは、 [UniVRM-1.0](https://github.com/vrm-c/UniVRM_1_0) 向けの `proto` ファイルを管理しています。
